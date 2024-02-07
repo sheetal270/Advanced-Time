@@ -3,9 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
     <title>World Clock</title>
     <style>
-       
+       #chartdiv {
+            width: 100%;
+            height: 500px;
+        }
         header {
     position: fixed;
     top: 0;
@@ -30,6 +38,7 @@ body {
 }
 
         .clock {
+            display: none;
             position: relative;
             width: 350px;
             height: 350px;
@@ -119,6 +128,7 @@ body {
 </head>
 <body>
 <header>Antique Clock</header>
+<div id="chartdiv"></div>
     <h2 id="country-heading">India
 </h2>
 
@@ -169,26 +179,25 @@ body {
 
 <script>
     function updateClocks() {
-    const selectedCountry = document.getElementById('country-select').value;
-    document.getElementById('country-heading').innerText = selectedCountry;
+        const selectedCountry = document.getElementById('country-select').value;
+        document.getElementById('country-heading').innerText = selectedCountry;
 
-         updateIndividualClock('India', 'hourHandIndia', 'minuteHandIndia', 'secondHandIndia', 'Asia/Kolkata');
-        updateIndividualClock('US', 'hourHandUS', 'minuteHandUS', 'secondHandUS', 'America/New_York');
-        updateIndividualClock('Germany', 'hourHandGermany', 'minuteHandGermany', 'secondHandGermany', 'Europe/Berlin');
- 
-       // Similar update functions for other clocks (US, Germany)
-    
-document.querySelectorAll('.clock').forEach(clock => 
-{
+        // Hide all clocks
+        const clocks = document.querySelectorAll('.clock');
+        clocks.forEach(clock => {
             clock.style.display = 'none';
         });
 
-        // Show the selected country's clock
+        // Show the selected clock
         document.getElementById(selectedCountry).style.display = 'block';
 
-        // Update the selected country's clock
-        updateIndividualClock(selectedCountry, `hourHand${selectedCountry}`, `minuteHand${selectedCountry}`, `secondHand${selectedCountry}`, getTimeZone(selectedCountry));
+updateIndividualClock('India', 'hourHandIndia', 'minuteHandIndia', 'secondHandIndia', 'Asia/Kolkata');
+        updateIndividualClock('US', 'hourHandUS', 'minuteHandUS', 'secondHandUS', 'America/New_York');
+        updateIndividualClock('Germany', 'hourHandGermany', 'minuteHandGermany', 'secondHandGermany', 'Europe/Berlin');
     }
+        // Update the selected country's clock
+        // updateIndividualClock(selectedCountry, `hourHand${selectedCountry}`, `minuteHand${selectedCountry}`, `secondHand${selectedCountry}`, getTimeZone(selectedCountry));
+    
 
     function updateIndividualClock(countryName, hourHandId, minuteHandId, secondHandId, timeZone) {
         // const clock = document.getElementById(clockId);
@@ -226,6 +235,57 @@ function getTimeZone(country) {
 
     // Initial call to set the initial time
     updateClocks();
+    var chart = am4core.create("chartdiv", am4maps.MapChart);
+        chart.geodata = am4geodata_worldLow;
+
+        // Set projection
+        chart.projection = new am4maps.projections.Miller();
+
+        // Create map polygon series for world map
+        var worldSeries = chart.series.push(new am4maps.MapPolygonSeries());
+        worldSeries.useGeodata = true;
+
+        // Configure tooltips
+        var polygonTemplate = worldSeries.mapPolygons.template;
+        polygonTemplate.tooltipText = "{name}: {time}";
+
+        // Add data for each country with its time zone
+        worldSeries.data = [
+            { "id": "IN", "name": "India", "timeZone": "Asia/Kolkata" },
+            { "id": "US", "name": "United States", "timeZone": "America/New_York" },
+            { "id": "DE", "name": "Germany", "timeZone": "Europe/Berlin" },
+            // Add more countries as needed
+        ];
+
+        // Set up map polygon series to display time zone tooltips
+        worldSeries.events.on("inited", function () {
+            worldSeries.mapPolygons.each(function (mapPolygon) {
+                var data = mapPolygon.dataItem.dataContext;
+                mapPolygon.tooltipText = data.name + ": {time}";
+
+                // Get current time in the country's time zone
+                var time = getCurrentTime(data.timeZone);
+                mapPolygon.dataItem.dataContext.time = time;
+
+                // Update tooltip when the time changes
+                setInterval(function () {
+                    var currentTime = getCurrentTime(data.timeZone);
+                    if (time !== currentTime) {
+                        time = currentTime;
+                        mapPolygon.dataItem.dataContext.time = time;
+                        mapPolygon.invalidate();
+                    }
+                }, 1000);
+            });
+        });
+
+        // Function to get the current time in a specific time zone
+        function getCurrentTime(timeZone) {
+            const options = { timeZone: timeZone, timeStyle: 'medium', hour12: false };
+            const formatter = new Intl.DateTimeFormat('en-US', options);
+            return formatter.format(new Date());
+        }
+
 </script>
 
 </body>
