@@ -52,13 +52,21 @@
             text-align: center;
         }
 
-     /*   #country-heading {
+        #selected-country-clock {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin-top: 60px;
+            border: 5px solid #333;
+            border-radius: 50%;
+            margin: 10px;
+            background: linear-gradient(to bottom right, #fff, #e0e0e0);
+            background-size: 100% 100%;
+            font-family: 'Arial', sans-serif;
+            display: inline-block;
             text-align: center;
-            margin-top: 20px;
-            font-size: 24px;
-            color: #333;
         }
-*/
+
         .numeral {
             position: absolute;
             font-size: 20px;
@@ -120,6 +128,19 @@
             height: 70px;
         }
 
+        #selectedCountryHourHand {
+            height: 30px;
+        }
+
+        #selectedCountryMinuteHand {
+            height: 50px;
+        }
+
+        #selectedCountrySecondHand {
+            background-color: skyblue;
+            height: 70px;
+        }
+
         #map-container {
             width: 100%;
             height: 400px; /* Adjust the height as needed */
@@ -141,11 +162,12 @@
             text-align: center;
             color: white;
         }
-         .country-name {
-            
-            margin:100px;
+
+        .country-name {
+            margin: 210px;
             font-size: 18px;
-            color: red;
+            color: black;
+            font-weight: bold;
             text-align: center;
         }
     </style>
@@ -154,8 +176,7 @@
 <header>Antique Clock</header>
 <div class="container">
     <h3 style="text-align: center;">World Clock</h3>
-    
-    </div>
+</div>
 <h2 id="country-heading"></h2>
 
 <div class="container clock-container">
@@ -191,14 +212,23 @@
         <div class="hand" id="secondHandGermany"></div>
         <div class="country-name">Germany</div>
     </div>
+
+    <div id="selected-country-clock" class="clock">
+        <div class="numeral XII">XII</div>
+        <div class="numeral III">III</div>
+        <div class="numeral VI">VI</div>
+        <div class="numeral IX">IX</div>
+        <div class="hand" id="selectedCountryHourHand"></div>
+        <div class="hand" id="selectedCountryMinuteHand"></div>
+        <div class="hand" id="selectedCountrySecondHand"></div>
+        <div class="country-name" id="selectedCountryName"></div>
+    </div>
 </div>
 
 <div class="container" id="map-container">
     <h2 style="text-align: center;">World Map</h2>
-   
-        <div id="chartdiv"></div>
-    </div>
-
+    <div id="chartdiv"></div>
+</div>
 
 <footer>
     Developed by: Sheetal Pisal
@@ -231,9 +261,29 @@
         secondHand.style.transform = `translate(-50%, -100%) rotate(${secondRotation}deg)`;
     }
 
+    function updateSelectedCountryClock(selectedCountry) {
+        const selectedCountryName = document.getElementById('selectedCountryName');
+        const selectedCountryHourHand = document.getElementById('selectedCountryHourHand');
+        const selectedCountryMinuteHand = document.getElementById('selectedCountryMinuteHand');
+        const selectedCountrySecondHand = document.getElementById('selectedCountrySecondHand');
+
+        // Set country name
+        selectedCountryName.innerText = selectedCountry.name;
+
+        // Update clock hands
+        updateIndividualClock('selected-country', 'selectedCountryHourHand', 'selectedCountryMinuteHand', 'selectedCountrySecondHand', selectedCountry.timeZone);
+
+        // Show the selected country clock
+        selectedCountryClock.style.display = 'block';
+    }
+
     setInterval(updateClocks, 1000);
     updateClocks();
-
+function clearSelectedCountryInterval() {
+        if (selectedCountryInterval) {
+            clearInterval(selectedCountryInterval);
+        }
+    }
     var chart = am4core.create("chartdiv", am4maps.MapChart);
     chart.geodata = am4geodata_worldLow;
     chart.projection = new am4maps.projections.Miller();
@@ -279,6 +329,7 @@
             { "id": 'FI', "name": 'Finland', "timeZone": 'Europe/Helsinki' },
             { "id": 'AQ', "name": 'Antarctica', "timeZone": 'Pacific/Auckland' },
             // Add more countries as needed
+        // Add more countries as needed
     ];
 
     worldSeries.events.on("inited", function () {
@@ -297,11 +348,32 @@
         });
     });
 
+   worldSeries.mapPolygons.template.events.on('hit', (event) => {
+        const selectedCountry = event.target.dataItem.dataContext;
+        updateSelectedCountryClock(selectedCountry);
+
+        // Clear the existing interval if any
+        if (selectedCountryInterval) {
+            clearInterval(selectedCountryInterval);
+        }
+
+        // Set a new interval for continuous updates
+        selectedCountryInterval = setInterval(() => {
+            const currentTime = getCurrentTime(selectedCountry.timeZone);
+            if (selectedCountryTime !== currentTime) {
+                selectedCountryTime = currentTime;
+                updateSelectedCountryClock(selectedCountry);
+            }
+        }, 1000);
+    });
+
+
     function getCurrentTime(timeZone) {
         const options = { timeZone: timeZone, timeStyle: 'medium', hour12: false };
         const formatter = new Intl.DateTimeFormat('en-US', options);
         return formatter.format(new Date());
     }
+
 </script>
 </body>
 </html>
