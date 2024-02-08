@@ -51,8 +51,7 @@
             display: inline-block;
             text-align: center;
         }
-
-        #selected-country-clock {
+#selected-country-clock {
             position: relative;
             width: 250px;
             height: 250px;
@@ -60,12 +59,16 @@
             border: 5px solid #333;
             border-radius: 50%;
             margin: 10px;
-            background: linear-gradient(to bottom right, #fff, #e0e0e0);
+            background: linear-gradient(to bottom right, #e66767, #ed6666); /* Change the background color */
+   
             background-size: 100% 100%;
             font-family: 'Arial', sans-serif;
             display: inline-block;
             text-align: center;
         }
+        #selected-country:hover {
+    background: linear-gradient(to bottom right, #ff7b7b, #ff7a7a); /* Change color on hover */
+}
 
         .numeral {
             position: absolute;
@@ -170,6 +173,7 @@
             font-weight: bold;
             text-align: center;
         }
+
     </style>
 </head>
 <body>
@@ -292,7 +296,8 @@ function clearSelectedCountryInterval() {
     worldSeries.useGeodata = true;
 
     var polygonTemplate = worldSeries.mapPolygons.template;
-    polygonTemplate.tooltipHTML = `<div style="color: white; background-color: darkred; padding: 10px; border-radius: 5px; font-size: 14px;">{name}: {time}</div>`;
+    polygonTemplate.tooltipHTML = `<div style="color:black; background-color: #ffcccb; padding: 10px; border-radius: 5px; font-size: 14px;">{name}: {time}</div>`;
+
 
     worldSeries.data = [
         { "id": "IN", "name": "India", "timeZone": "Asia/Kolkata" },
