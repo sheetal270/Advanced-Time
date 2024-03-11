@@ -218,16 +218,7 @@ background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,45,45,0.538252
         <div class="country-name">Germany</div>
     </div>
 
-    <div id="selected-country-clock" class="clock">
-        <div class="numeral XII">XII</div>
-        <div class="numeral III">III</div>
-        <div class="numeral VI">VI</div>
-        <div class="numeral IX">IX</div>
-        <div class="hand" id="selectedCountryHourHand"></div>
-        <div class="hand" id="selectedCountryMinuteHand"></div>
-        <div class="hand" id="selectedCountrySecondHand"></div>
-        <div class="country-name" id="selectedCountryName"></div>
-    </div>
+    
 </div>
 
 <div class="container" id="map-container">
@@ -337,7 +328,16 @@ function clearSelectedCountryInterval() {
             // Add more countries as needed
         // Add more countries as needed
     ];
-
+<div id="selected-country-clock" class="clock">
+        <div class="numeral XII">XII</div>
+        <div class="numeral III">III</div>
+        <div class="numeral VI">VI</div>
+        <div class="numeral IX">IX</div>
+        <div class="hand" id="selectedCountryHourHand"></div>
+        <div class="hand" id="selectedCountryMinuteHand"></div>
+        <div class="hand" id="selectedCountrySecondHand"></div>
+        <div class="country-name" id="selectedCountryName"></div>
+    </div>
     worldSeries.events.on("inited", function () {
         worldSeries.mapPolygons.each(function (mapPolygon) {
             var data = mapPolygon.dataItem.dataContext;
