@@ -3,77 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Faster+One&family=Pacifico&family=Song+Myung&family=Teko:wght@300..700&display=swap" rel="stylesheet">    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<!-- Add this line to include FontAwesome CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-dNwXu+BkVsCtTPBpM44fVX0a9mNgw/6C98fslWifKuOluEJ3wuZOukN5mHPDtn2fI3jOKw18buj/FeCg75gkIw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 
     <title>World Clock</title>
     <style>
-       #chartdiv {
-            width: 100%;
-            height: 500px;
-        }
         header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    font-size: 30px;
-    background-color: #232323;
-    padding: 10px;
-    text-align: center;
-    color: white;
-    font-weight: bold;
-    z-index: 100; /* Ensure the header is on top of other elements */
-}
+            position: fixed;
+            top: 0;
+            width: 100%;
+            font-size: 24px;
+            font-family: "Song Myung", serif;
+            background-color: #232323;
+            padding: 10px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            z-index: 100;
+        }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background: linear-gradient(to bottom right, #4e54c8, #8f94fb);
-    padding-top: 60px; /* Adjusted to account for the fixed header */
-}
+        body {
+            padding-top: 80px;
+            background: rgb(34,193,195);
+background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,45,45,0.5382528011204482) 100%);
+        }
+
+        .clock-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
         .clock {
-            display: none;
             position: relative;
-            width: 350px;
-            height: 350px;
-            border: 5px solid #333;
+            width: 250px;
+            height: 250px;
+            margin-top: 60px;
+            border: 4px solid  rgba(255, 208, 0, 0.767);;
             border-radius: 50%;
             margin: 10px;
             background: linear-gradient(to bottom right, #fff, #e0e0e0);
             background-size: 100% 100%;
             font-family: 'Arial', sans-serif;
             display: inline-block;
-        }
-          #country-heading {
             text-align: center;
-            margin-top: 20px;
-            font-size: 24px;
-            color: #333;
         }
+        #SelectedCountryClock {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin-top: 140px;
+    border: 4px solid #333;
+
+    border-radius: 50%;
+    margin-right: 250px;
+    background: lightpink; /* Change the background color */
+    background-size: 100% 100%;
+    font-family: 'Arial', sans-serif;
+    display: inline-block;
+
+    text-align: center;
+    float: right; /* Remove the float property */
+    
+}
+
+        #selected-country:hover {
+    background: linear-gradient(to bottom right, #ff7b7b, #ff7a7a); /* Change color on hover */
+}
 
         .numeral {
             position: absolute;
-            font-size: 25px;
+            font-size: 20px;
             color: #333;
             font-weight: bold;
         }
 
-        .numeral.XII { top: 12%; left: 50%; transform: translate(-50%, -130%); }
+        .numeral.XII { top: 18%; left: 50%; transform: translate(-50%, -130%); }
         .numeral.III { bottom: 50%; right: 7%; transform: translate(50%, 0);}
         .numeral.VI { bottom: 3%; left: 50%; transform: translate(-50%, 0);  }
         .numeral.IX {  bottom: 46%; left: 7%; transform: translate(-50%, -50%); }
 
         .hand {
             position: absolute;
-            width: 2px;
+            width:4px;
             height: 50px;
-            background-color: blue;
+            background-color: yellowgreen;
             top: 50%;
             left: 50%;
             border: 1px solid;
@@ -82,97 +105,105 @@ body {
         }
 
         #hourHandIndia {
-            height: 40px;
+            height: 30px;
         }
 
         #minuteHandIndia {
-            height: 80px;
+            height: 50px;
         }
 
         #secondHandIndia {
             background-color: skyblue;
-            height: 100px;
+            height: 70px;
         }
         #hourHandUS {
-            height: 40px;
+            height: 30px;
         }
 
         #minuteHandUS {
-            height: 80px;
+            height: 50px;
         }
 
         #secondHandUS {
             background-color: skyblue;
-            height: 100px;
+            height: 70px;
         }
         #hourHandGermany {
-            height: 40px;
+            height: 30px;
         }
 
         #minuteHandGermany {
-            height: 80px;
+            height: 50px;
         }
 
         #secondHandGermany {
             background-color: skyblue;
-            height: 100px;
+            height: 70px;
         }
 
-        #clock-container {
-            text-align: center;
+        #selectedCountryHourHand {
+            height: 30px;
+        }
+
+        #selectedCountryMinuteHand {
+            height: 50px;
+        }
+
+        #selectedCountrySecondHand {
+            background-color: skyblue;
+            height: 70px;
+        }
+
+        #map-container {
+            width: 60%;
+            float: left;
+            height: 400px; 
+            /* width: 100%;
+            
+            /* font-family: "Faster One", system-ui; */
+            /* 
+            margin-top: 20px;
+            margin-bottom: 20px;  */
+        }
+
+        #chartdiv {
+            width: 100%;
+            height: 100%;
         }
 
         footer {
             position: fixed;
             bottom: 0;
             width: 100%;
-            font-size: 24px;
+            font-size: 14px;
+            font-family: "Pacifico", cursive;
             background-color: #232323;
             padding: 10px;
             text-align: center;
             color: white;
         }
 
-        label {
-            font-size: 18px;
-            margin-right: 10px;
-            color: white;
+        .country-name {
+            margin: 210px;
+            font-size: 22px;
+            font-family: "Teko", sans-serif;
+            /* color: rgba(134, 6, 253, 0.514); */
+            color: #008000;
+            font-weight: bold;
+            text-align: center;
         }
+     /* Adjust the styles to move the button to the map container */
+        
 
-        select {
-            font-size: 16px;
-            padding: 8px;
-        }
-        @media only screen and (max-width: 600px) {
-    /* Adjust the styling for mobile screens */
 
-    header {
-        font-size: 20px;
-    }
-
-    body {
-        padding-top: 40px;
-    }
-
-    .clock {
-        width: 40vw;
-        height: 40vw;
-    }
-
-    #world-map {
-        width: 220vw;
-        height: 220vw;
-    }
-    
     </style>
 </head>
 <body>
-<header>Antique Clock</header>
-<div id="chartdiv"></div>
-    <h2 id="country-heading">India
-</h2>
+<header>Vintage Timer In Javascript</header>
 
-<div id="clock-container">
+<h2 id="country-heading"></h2>
+
+<div class="container clock-container">
     <div id="India" class="clock">
         <div class="numeral XII">XII</div>
         <div class="numeral III">III</div>
@@ -181,71 +212,94 @@ body {
         <div class="hand" id="hourHandIndia"></div>
         <div class="hand" id="minuteHandIndia"></div>
         <div class="hand" id="secondHandIndia"></div>
+        <div class="country-name">India</div>
     </div>
 
     <div id="US" class="clock">
-       <div class="numeral XII">XII</div>
+        <div class="numeral XII">XII</div>
         <div class="numeral III">III</div>
         <div class="numeral VI">VI</div>
         <div class="numeral IX">IX</div>
         <div class="hand" id="hourHandUS"></div>
         <div class="hand" id="minuteHandUS"></div>
         <div class="hand" id="secondHandUS"></div>
+        <div class="country-name ">United States</div>
     </div>
 
     <div id="Germany" class="clock">
-         <div class="numeral XII">XII</div>
+        <div class="numeral XII">XII</div>
         <div class="numeral III">III</div>
         <div class="numeral VI">VI</div>
         <div class="numeral IX">IX</div>
         <div class="hand" id="hourHandGermany"></div>
         <div class="hand" id="minuteHandGermany"></div>
         <div class="hand" id="secondHandGermany"></div>
+        <div class="country-name">Germany</div>
     </div>
+    <!-- <div id="SelectedCountryClock" class="clock">
+
+        <div class="numeral XII">XII</div>
+        <div class="numeral III">III</div>
+        <div class="numeral VI">VI</div>
+        <div class="numeral IX">IX</div>
+        <div class="hand" id="selectedCountryHourHand"></div>
+        <div class="hand" id="selectedCountryMinuteHand"></div>
+        <div class="hand" id="selectedCountrySecondHand"></div>
+        <div class="country-name" id="selectedCountryName"></div>
+    </div> -->
+    
 </div>
 
-<div>
-    <label for="country-select">Select a country:</label>
-    <select id="country-select" onchange="updateClocks()">
-        <option value="India">India</option>
-        <option value="US">United States</option>
-        <option value="Germany">Germany</option>
-    </select>
-</div>
+<div class="container" id="map-container">
+    <!-- Add this button in your HTML body -->
+<button class="reset-button" onclick="resetMap()">Reset Map</button>
 
+    <h2 style="text-align: center; font-family: Faster One, system-ui;">World Map   </h2>
+    <h4 style="text-align: center; font-family: Faster One, system-ui;">Please Double click for Switching Country</h4>
+   
+    <div id="chartdiv"></div>
+</div>
+<div id="SelectedCountryClock" class="clock">
+    <div class="numeral XII">XII</div>
+    <div class="numeral III">III</div>
+    <div class="numeral VI">VI</div>
+    <div class="numeral IX">IX</div>
+    <div class="hand" id="selectedCountryHourHand"></div>
+    <div class="hand" id="selectedCountryMinuteHand"></div>
+    <div class="hand" id="selectedCountrySecondHand"></div>
+    <div class="country-name" id="selectedCountryName"></div>
+</div>
 <footer>
+    Guided By: Ajay Sir
     Developed by: Sheetal Pisal
 </footer>
-
 <script>
+    // Add this JavaScript function in your <script> tag or in a separate script section
+    function resetMap() {
+        chart.goHome();
+    }
+
+    // Your existing JavaScript code goes here...
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let selectedCountryInterval;
+    let selectedCountryTime;
+    
     function updateClocks() {
-        const selectedCountry = document.getElementById('country-select').value;
-        document.getElementById('country-heading').innerText = selectedCountry;
-
-        // Hide all clocks
-        const clocks = document.querySelectorAll('.clock');
-        clocks.forEach(clock => {
-            clock.style.display = 'none';
-        });
-
-        // Show the selected clock
-        document.getElementById(selectedCountry).style.display = 'block';
-
-updateIndividualClock('India', 'hourHandIndia', 'minuteHandIndia', 'secondHandIndia', 'Asia/Kolkata');
+        updateIndividualClock('India', 'hourHandIndia', 'minuteHandIndia', 'secondHandIndia', 'Asia/Kolkata');
         updateIndividualClock('US', 'hourHandUS', 'minuteHandUS', 'secondHandUS', 'America/New_York');
         updateIndividualClock('Germany', 'hourHandGermany', 'minuteHandGermany', 'secondHandGermany', 'Europe/Berlin');
     }
-        // Update the selected country's clock
-        // updateIndividualClock(selectedCountry, `hourHand${selectedCountry}`, `minuteHand${selectedCountry}`, `secondHand${selectedCountry}`, getTimeZone(selectedCountry));
-    
 
     function updateIndividualClock(countryName, hourHandId, minuteHandId, secondHandId, timeZone) {
-        // const clock = document.getElementById(clockId);
         const hourHand = document.getElementById(hourHandId);
         const minuteHand = document.getElementById(minuteHandId);
         const secondHand = document.getElementById(secondHandId);
 
-       const now = new Date(new Date().toLocaleString('en-US', { timeZone: timeZone }));
+        const now = new Date(new Date().toLocaleString('en-US', { timeZone: timeZone }));
         const hours = now.getHours() % 12; // Convert to 12-hour format
         const minutes = now.getMinutes();
         const seconds = now.getSeconds();
@@ -258,44 +312,88 @@ updateIndividualClock('India', 'hourHandIndia', 'minuteHandIndia', 'secondHandIn
         minuteHand.style.transform = `translate(-50%, -100%) rotate(${minuteRotation}deg)`;
         secondHand.style.transform = `translate(-50%, -100%) rotate(${secondRotation}deg)`;
     }
-function getTimeZone(country) {
-        switch (country) {
-            case 'India':
-                return 'Asia/Kolkata';
-            case 'US':
-                return 'America/New_York';
-            case 'Germany':
-                return 'Europe/Berlin';
 
-            default:
-                return '';
+    function updateSelectedCountryClock(selectedCountry) {
+        const selectedCountryName = document.getElementById('selectedCountryName');
+        const selectedCountryHourHand = document.getElementById('selectedCountryHourHand');
+        const selectedCountryMinuteHand = document.getElementById('selectedCountryMinuteHand');
+        const selectedCountrySecondHand = document.getElementById('selectedCountrySecondHand');
+        const selectedCountryClock = document.getElementById('SelectedCountryClock');
+
+        // Set country name
+        selectedCountryName.innerText = selectedCountry.name;
+
+        // Update clock hands
+        updateIndividualClock('selected-country', 'selectedCountryHourHand', 'selectedCountryMinuteHand', 'selectedCountrySecondHand', selectedCountry.timeZone);
+
+        // Show the selected country clock
+        selectedCountryClock.style.display = 'block';
+    }
+
+    function clearSelectedCountryInterval() {
+        if (selectedCountryInterval) {
+            clearInterval(selectedCountryInterval);
         }
     }
-    // // Update all clocks every second
-     setInterval(updateClocks, 1000);
 
-    // Initial call to set the initial time
-    updateClocks();
+    function handleMapClick(event) {
+        const selectedCountry = event.target.dataItem.dataContext;
+        updateSelectedCountryClock(selectedCountry);
+
+        // Clear the existing interval if any
+        clearSelectedCountryInterval();
+
+        // Set a new interval for continuous updates
+        selectedCountryInterval = setInterval(() => {
+            const currentTime = getCurrentTime(selectedCountry.timeZone);
+            if (selectedCountryTime !== currentTime) {
+                selectedCountryTime = currentTime;
+                updateSelectedCountryClock(selectedCountry);
+            }
+        }, 1000);
+    }
+
     var chart = am4core.create("chartdiv", am4maps.MapChart);
-        chart.geodata = am4geodata_worldLow;
+    chart.geodata = am4geodata_worldLow;
+    chart.projection = new am4maps.projections.Miller();
 
-        // Set projection
-        chart.projection = new am4maps.projections.Miller();
+    var worldSeries = chart.series.push(new am4maps.MapPolygonSeries());
+    worldSeries.useGeodata = true;
 
-        // Create map polygon series for world map
-        var worldSeries = chart.series.push(new am4maps.MapPolygonSeries());
-        worldSeries.useGeodata = true;
+    var polygonTemplate = worldSeries.mapPolygons.template;
+    polygonTemplate.tooltipHTML = `<div style="color:black; background-color: #ffcccb; padding: 10px; border-radius: 5px; font-size: 14px;">{name}: {time}</div>`;
 
-        // Configure tooltips
-        var polygonTemplate = worldSeries.mapPolygons.template;
-        polygonTemplate.tooltipText = "{name}: {time}";
+    var worldSeries = chart.series.push(new am4maps.MapPolygonSeries());
+worldSeries.useGeodata = true;
 
-        // Add data for each country with its time zone
-        worldSeries.data = [
-            { "id": "IN", "name": "India", "timeZone": "Asia/Kolkata" },
-            { "id": "US", "name": "United States", "timeZone": "America/New_York" },
-            { "id": "DE", "name": "Germany", "timeZone": "Europe/Berlin" },
-            { "id": "CA", "name": "Canada", "timeZone": "America/Toronto" },
+var polygonTemplate = worldSeries.mapPolygons.template;
+polygonTemplate.tooltipHTML = `<div style="color:black; background-color: #ffcccb; padding: 10px; border-radius: 5px; font-size: 14px;">{name}: {time}</div>`;
+
+// Define an array of colors to use for the countries
+var colors = [
+    am4core.color("#74B266"),
+    am4core.color("#F15A60"),
+    am4core.color("#76B7B2"),
+    // Add more colors as needed
+];
+
+// Set the default fill color
+polygonTemplate.fill = am4core.color("#74B266");
+
+// Use a color based on the index of the country
+polygonTemplate.adapter.add("fill", (fill, target) => {
+    if (target.dataItem) {
+        // Use a color from the array based on the index of the country
+        return colors[target.dataItem.index % colors.length];
+    }
+    return fill;
+});
+
+    worldSeries.data = [
+    { "id": "IN", "name": "India", "timeZone": "Asia/Kolkata" },
+        { "id": "US", "name": "United States", "timeZone": "America/New_York" },
+        { "id": "DE", "name": "Germany", "timeZone": "Europe/Berlin" },
+        { "id": "CA", "name": "Canada", "timeZone": "America/Toronto" },
             { "id": 'AU', "name": 'Australia', "timeZone": 'Australia/Sydney' },
             { "id": 'GB', "name": 'United Kingdom', "timeZone": 'Europe/London' },
             { "id": 'JP', "name": 'Japan', "timeZone": 'Asia/Tokyo' },
@@ -325,42 +423,59 @@ function getTimeZone(country) {
             { "id": 'DK', "name": 'Denmark', "timeZone": 'Europe/Copenhagen' },
             { "id": 'FI', "name": 'Finland', "timeZone": 'Europe/Helsinki' },
             { "id": 'AQ', "name": 'Antarctica', "timeZone": 'Pacific/Auckland' },
-            // Add more countries as needed
-        ];
+       
+        // Add more countries as needed
+    ];
+    worldSeries.events.on("inited", function () {
+        worldSeries.mapPolygons.each(function (mapPolygon) {
+            var data = mapPolygon.dataItem.dataContext;
+            var time = getCurrentTime(data.timeZone);
 
-        // Set up map polygon series to display time zone tooltips
-        worldSeries.events.on("inited", function () {
-            worldSeries.mapPolygons.each(function (mapPolygon) {
-                var data = mapPolygon.dataItem.dataContext;
-                mapPolygon.tooltipText = data.name + ": {time}";
-
-                // Get current time in the country's time zone
-                var time = getCurrentTime(data.timeZone);
-                mapPolygon.dataItem.dataContext.time = time;
-
-                // Update tooltip when the time changes
-                setInterval(function () {
-                    var currentTime = getCurrentTime(data.timeZone);
-                    if (time !== currentTime) {
-                        time = currentTime;
-                        mapPolygon.dataItem.dataContext.time = time;
-                        mapPolygon.invalidate();
-                    }
-                }, 1000);
-                 mapPolygon.tooltipHTML = `<div style="color: white; background-color: darkred; padding: 10px; border-radius: 5px; font-size: 18px;">${data.name}: ${time}</div>`;
-
-            });
+            setInterval(function () {
+                var currentTime = getCurrentTime(data.timeZone);
+                if (time !== currentTime) {
+                    time = currentTime;
+                    mapPolygon.dataItem.dataContext.time = time;
+                    mapPolygon.invalidate();
+                }
+            }, 1000);
         });
+    });
 
+    worldSeries.events.on("hit", handleMapClick);
 
-        // Function to get the current time in a specific time zone
-        function getCurrentTime(timeZone) {
-            const options = { timeZone: timeZone, timeStyle: 'medium', hour12: false };
-            const formatter = new Intl.DateTimeFormat('en-US', options);
-            return formatter.format(new Date());
+    function getCurrentTime(timeZone) {
+        const options = { timeZone: timeZone, timeStyle: 'medium', hour12: false };
+        const formatter = new Intl.DateTimeFormat('en-US', options);
+        return formatter.format(new Date());
+    }
+
+    setInterval(updateClocks, 1000);
+    updateClocks();
+    worldSeries.mapPolygons.template.events.on('hit', (event) => {
+        const selectedCountry = event.target.dataItem.dataContext;
+        updateSelectedCountryClock(selectedCountry);
+
+        // Clear the existing interval if any
+        if (selectedCountryInterval) {
+            clearInterval(selectedCountryInterval);
         }
 
-</script>
+        // Set a new interval for continuous updates
+        selectedCountryInterval = setInterval(() => {
+            const currentTime = getCurrentTime(selectedCountry.timeZone);
+            if (selectedCountryTime !== currentTime) {
+                selectedCountryTime = currentTime;
+                updateSelectedCountryClock(selectedCountry);
+            }
+        }, 1000);
+    });
 
-</body>
-</html>
+
+    function getCurrentTime(timeZone) {
+        const options = { timeZone: timeZone, timeStyle: 'medium', hour12: false };
+        const formatter = new Intl.DateTimeFormat('en-US', options);
+        return formatter.format(new Date());
+    }
+
+</script>
